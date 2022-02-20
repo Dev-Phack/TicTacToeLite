@@ -16,9 +16,9 @@ public class ScoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
-        List<ScoreItem> scoreItemList = new ArrayList<>();
-        scoreItemList.add(new ScoreItem(1, "Tom vs Nina", "Winner: Nina", new Date()));
-        scoreItemList.add(new ScoreItem(2, "Tom vs Jerry", "Winner: Jerry", new Date()));
+        List<ScoreItem> scoreItemList = GameActivity.databaseManager.readScores();
+//        scoreItemList.add(new ScoreItem(1, "Tom vs Nina", "Winner: Nina", new Date()));
+//        scoreItemList.add(new ScoreItem(2, "Tom vs Jerry", "Winner: Jerry", new Date()));
 
         ListView scoreListView = findViewById(R.id.scoreList);
         scoreListView.setAdapter(new ScoreItemAdapter(this, scoreItemList));

@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -16,6 +18,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private Button[] buttons = new Button[9];
     private Button resetGame;
     private Button goOn;
+
+    public static DatabaseManager databaseManager;
 
     private int playerOneScoreCount, playerTwoScoreCount, rountCount;
     boolean activePlayer;
@@ -40,6 +44,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         playerOneScore = (TextView) findViewById(R.id.playerOneScore);
         playerTwoScore = (TextView) findViewById(R.id.playerTwoScore);
         playerStatus = (TextView) findViewById(R.id.playerStatus);
+
+        databaseManager = new DatabaseManager(this);
 
         resetGame = (Button) findViewById(R.id.resetGame);
         goOn = (Button) findViewById(R.id.goOn);
@@ -82,11 +88,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 playerOneScoreCount++;
                 updatePlayerScore();
                 Toast.makeText(this, "Player one won!", Toast.LENGTH_SHORT).show();
+                databaseManager.insertScore("P1 VS P2", "Winner: P1");
 //                playAgain();
             }else if (!activePlayer && !blocus){
                 playerTwoScoreCount++;
                 updatePlayerScore();
                 Toast.makeText(this, "Player two won!", Toast.LENGTH_SHORT).show();
+                databaseManager.insertScore("P1 VS P2", "Winner: P2");
 //                playAgain();
             }
             blocus = true;
@@ -94,9 +102,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             blocus = true;
 //            playAgain();
             Toast.makeText(this, "No winner!", Toast.LENGTH_SHORT).show();
+            databaseManager.insertScore("P1 VS P2", "No Winner!");
         }else {
             activePlayer = !activePlayer;
         }
+        databaseManager.close();
 
         goOn.setOnClickListener(new View.OnClickListener() {
             @Override
