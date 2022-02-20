@@ -19,6 +19,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private int playerOneScoreCount, playerTwoScoreCount, rountCount;
     boolean activePlayer;
+    boolean blocus = false;
 
     //player1 => 0
     //player2 => 1
@@ -64,12 +65,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         String buttonID = view.getResources().getResourceEntryName(view.getId());//example: return btn_2
         int gameStatePointer = Integer.parseInt(buttonID.substring(buttonID.length()-1, buttonID.length()));//return 2
 
-        if (activePlayer){
+        if (activePlayer && !blocus){
             ((Button) view).setText("X");
             ((Button) view).setTextColor(Color.parseColor("#FFC34A"));
             gameState[gameStatePointer] = 0;
         }
-        else{
+        else if (!activePlayer && !blocus){
             ((Button) view).setText("O");
             ((Button) view).setTextColor(Color.parseColor("#70FFEA"));
             gameState[gameStatePointer] = 1;
@@ -77,18 +78,20 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         rountCount++;
 
         if (checkWinner()){
-            if (activePlayer){
+            if (activePlayer && !blocus){
                 playerOneScoreCount++;
                 updatePlayerScore();
                 Toast.makeText(this, "Player one won!", Toast.LENGTH_SHORT).show();
 //                playAgain();
-            }else {
+            }else if (!activePlayer && !blocus){
                 playerTwoScoreCount++;
                 updatePlayerScore();
                 Toast.makeText(this, "Player two won!", Toast.LENGTH_SHORT).show();
 //                playAgain();
             }
+            blocus = true;
         }else if (rountCount == 9){
+            blocus = true;
 //            playAgain();
             Toast.makeText(this, "No winner!", Toast.LENGTH_SHORT).show();
         }else {
@@ -99,6 +102,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 playAgain();
+                blocus = false;
             }
         });
 
